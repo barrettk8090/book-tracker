@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, create_engine, func, ForeignKey
-from sqlalchemy.orm import Session, declarative_base, validates
+from sqlalchemy.orm import Session, declarative_base, validates, relationship
 
 Base = declarative_base()
 
@@ -8,15 +8,9 @@ Base = declarative_base()
 class Bookshelf(Base):
     __tablename__ = "bookshelf" 
     id = Column(Integer, primary_key = True)
-    book_title = Column(String, nullable = False)
-    book_author = Column(String, nullable = False)
-    book_description = Column(String)
-    page_count = Column(Integer)
-    # date_started = Column()
-    # date_finished = Column()
-
-    def __repr__(self):
-        return f'{self.book_title} by author {self.book_author}. Description: {self.book_description}. Page count {self.page_count}.'
+    want_to_read_connection = relationship('WantToRead', back_populates="bookshelf_connection")
+    currently_reading_connection = relationship('CurrentlyReading', back_populates="bookshelf_connection")
+    completed_books_connection = relationship('CompletedBooks', back_populates="bookshelf_connection")
 
 class WantToRead(Base):
     __tablename__ = "want to read"
@@ -25,6 +19,8 @@ class WantToRead(Base):
     book_author = Column(String)
     book_description = Column(String)
     page_count = Column(Integer)
+    bookshelf_id = Column(ForeignKey('bookshelf.id'))
+    bookshelf_connection = relationship('Bookshelf', back_populates="want_to_read_connection")
 
 class CurrentlyReading(Base):
     __tablename__ = "currently reading"
@@ -34,6 +30,8 @@ class CurrentlyReading(Base):
     book_description = Column(String)
     page_count = Column(Integer)
     current_page = Column(Integer)
+    bookshelf_id = Column(ForeignKey('bookshelf.id'))
+    bookshelf_connection = relationship('Bookshelf', back_populates="currently_reading_connection")
 
 class CompletedBooks(Base):
     __tablename__ = "completed"
@@ -44,6 +42,8 @@ class CompletedBooks(Base):
     page_count = Column(Integer)
     star_rating = Column(Integer)
     personal_review = Column(String)
+    bookshelf_id = Column(ForeignKey('bookshelf.id'))
+    bookshelf_connection = relationship('Bookshelf', back_populates="completed_books_connection")
 
 
 engine = create_engine('sqlite:///bookshelf.db')
