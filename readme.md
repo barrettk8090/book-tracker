@@ -1,0 +1,3 @@
+# GooderReads
+
+Initializing ReadMe
