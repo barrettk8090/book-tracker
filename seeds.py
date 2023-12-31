@@ -9,6 +9,22 @@ if __name__ == '__main__':
 
     with Session(engine) as session:
 
+        #Function for easily adding a book to the want to read list. 
+        def add_want_to_read(session, title, author, description, page_count):
+            bookshelf = Bookshelf()
+            session.add(bookshelf)
+            session.commit()
+
+            wanttoreadbook = WantToRead(
+                book_title = title,
+                book_author = author,
+                book_description = description,
+                page_count = page_count,
+                bookshelf_id = bookshelf.id
+            )
+
+            session.add(wanttoreadbook)
+            session.commit()
 
         #Function for easily adding a book to your currently reading list.
         def add_currently_reading_book(session, title, author, description, page_count, current_page):
@@ -47,10 +63,14 @@ if __name__ == '__main__':
             session.add(completedbook)
             session.commit()
 
+        add_want_to_read(session, "Wool", "Hugh Howey", "Thousands of people live underground and no one knows why.", 594)
+        add_want_to_read(session, "Leviathan Wakes", "James S.A. Corey", "I'm honestly not entirely sure but I've heard its good.", 592)
+
         add_currently_reading_book(session, "Hyperion", "Dan Simmons", "A few voyagers travel to Hyperion to solve a great cosmic mystery", 483, 291)
         add_currently_reading_book(session, "Why We Sleep", "Dan Simmons", "Neuroscientist and sleep expert Matthew Walker provides a revolutionary exploration of sleep, explaining how it affects every aspect of our physical and mental well-being.", 368, 250)
 
         add_completed_book(session, "The Three Body Problem", "Liu Cixin", "The people of Earth begin a friendly conversation with aliens!", 472, 5, "Loved this book and all the rest of the trilogy!")
+        add_completed_book(session, "The Dark Forest", "Liu Cixin", "The people of earth realize that the aliens are actually not friendly at all and want to kill everyone.", 512, 5, "This book rocked and one of the end sequences is incredible. Love the idea of the dark forest.")
 
         # bookshelf = Bookshelf()
         # session.add(bookshelf)
