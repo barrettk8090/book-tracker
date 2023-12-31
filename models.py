@@ -15,6 +15,7 @@ class Bookshelf(Base):
 class WantToRead(Base):
     __tablename__ = "want to read"
     id = Column(Integer, primary_key = True)
+    shelf_type = Column(String, default = "Want to Read")
     book_title = Column(String, nullable = False)
     book_author = Column(String, nullable = False)
     book_description = Column(String)
@@ -43,6 +44,7 @@ class WantToRead(Base):
 class CurrentlyReading(Base):
     __tablename__ = "currently reading"
     id = Column(Integer, primary_key = True)
+    self_type = Column(String, default = "Currently Reading")
     book_title = Column(String)
     book_author = Column(String)
     book_description = Column(String)
@@ -54,6 +56,7 @@ class CurrentlyReading(Base):
 class CompletedBook(Base):
     __tablename__ = "completed"
     id = Column(Integer, primary_key = True)
+    self_type = Column(String, default= "Completed")
     book_title = Column(String)
     book_author = Column(String)
     book_description = Column(String)
