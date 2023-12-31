@@ -12,6 +12,14 @@ class Bookshelf(Base):
     currently_reading_connection = relationship('CurrentlyReading', back_populates="bookshelf_connection")
     completed_books_connection = relationship('CompletedBook', back_populates="bookshelf_connection")
 
+    def __repr__(self):
+        want_to_read_books = ", ".join([book.book_title for book in self.want_to_read_connection])
+        currently_reading_books = ", ".join([book.book_title for book in self.currently_reading_connection])
+        completed_books = ", ".join([book.book_title for book in self.completed_books_connection])
+
+        return f"Bookshelf(id={self.id}), WantToRead =[{want_to_read_books}], CurrentlyReading=[{currently_reading_books}], Completed=[{completed_books}]"
+
+
 class WantToRead(Base):
     __tablename__ = "want to read"
     id = Column(Integer, primary_key = True)
@@ -40,6 +48,8 @@ class WantToRead(Base):
         else:
             raise ValueError("Please enter a page count between 2 and 3000 pages.")
     
+    def __repr__(self):
+        return f'{self.book_title}'
 
 class CurrentlyReading(Base):
     __tablename__ = "currently reading"
