@@ -15,12 +15,30 @@ class Bookshelf(Base):
 class WantToRead(Base):
     __tablename__ = "want to read"
     id = Column(Integer, primary_key = True)
-    book_title = Column(String)
-    book_author = Column(String)
+    book_title = Column(String, nullable = False)
+    book_author = Column(String, nullable = False)
     book_description = Column(String)
     page_count = Column(Integer)
     bookshelf_id = Column(ForeignKey('bookshelf.id'))
     bookshelf_connection = relationship('Bookshelf', back_populates="want_to_read_connection")
+
+    @validates("book_title", "book_author")
+    def validates_title_and_author(self, key, value):
+        if type(value) is str and 0<len(value):
+            return value
+        else:
+            raise ValueError(f'Sorry, that isnt a valid {value}')
+        #Working, but value isn't getting returned, need to fix
+        
+    @validates("page_count")
+    def validates_page_count(self, key, value):
+        if 0 < value and value <= 3000:
+            return value
+        elif value > 3001:
+            raise ValueError("It looks like you're trying to add a book that's longer than 3000 pages. You'll never read that, so it hasn't been added to your Want To Read list.")
+        else:
+            raise ValueError("Please enter a page count between 2 and 3000 pages.")
+    
 
 class CurrentlyReading(Base):
     __tablename__ = "currently reading"
