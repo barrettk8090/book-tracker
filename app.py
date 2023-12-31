@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
         entry_selection = input('''
 
-Welcome to your bookshelf! How can I be of service?
+Welcome to your bookshelf! What would you like to do today?
                                 
 1. View all the books on your bookshelf.
 2. View or edit your Want To Read list.
