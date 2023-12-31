@@ -10,7 +10,7 @@ class Bookshelf(Base):
     id = Column(Integer, primary_key = True)
     want_to_read_connection = relationship('WantToRead', back_populates="bookshelf_connection")
     currently_reading_connection = relationship('CurrentlyReading', back_populates="bookshelf_connection")
-    completed_books_connection = relationship('CompletedBooks', back_populates="bookshelf_connection")
+    completed_books_connection = relationship('CompletedBook', back_populates="bookshelf_connection")
 
 class WantToRead(Base):
     __tablename__ = "want to read"
@@ -33,7 +33,7 @@ class CurrentlyReading(Base):
     bookshelf_id = Column(ForeignKey('bookshelf.id'))
     bookshelf_connection = relationship('Bookshelf', back_populates="currently_reading_connection")
 
-class CompletedBooks(Base):
+class CompletedBook(Base):
     __tablename__ = "completed"
     id = Column(Integer, primary_key = True)
     book_title = Column(String)
