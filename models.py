@@ -77,5 +77,5 @@ class CompletedBook(Base):
     bookshelf_connection = relationship('Bookshelf', back_populates="completed_books_connection")
 
 
-# engine = create_engine('sqlite:///bookshelf.db')
+engine = create_engine('sqlite:///bookshelf.db')
 
