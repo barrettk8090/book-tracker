@@ -27,6 +27,12 @@ class Book(Base):
     bookshelf_id = Column(ForeignKey('bookshelf.id'))
     bookshelf_connection = relationship('Bookshelf', back_populates="book_connection")
 
+    def __repr__(self):
+        return f'''
+        {self.title} by {self.author}.
+        {self.description}
+        Pages: {self.page_count}
+        Type: {self.type}
+        '''
 
 engine = create_engine('sqlite:///bookshelf.db')
-
