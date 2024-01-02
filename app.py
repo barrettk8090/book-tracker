@@ -244,10 +244,10 @@ def main():
             ]
             response = inquirer.prompt(questions)
             if response["completed_main_menu"] == "View all my completed books.":
-                #view_cb()
+                view_cb()
                 pass
             elif response["completed_main_menu"] == "Get cool stats on the books I've finished.":
-                #cool_cb_stats()
+                cool_cb_stats()
                 pass
             elif response["completed_main_menu"] == "Edit a book on your completed list":
                 #edit_cb()
@@ -257,6 +257,57 @@ def main():
                 pass
             else:
                 main_menu()
+
+        def cb_return_prompt():
+            questions = [
+                inquirer.List(
+                "cb_return",
+                message = "Do you want to return to the Completed Books selection screen, or back to the main menu?",
+                choices = [
+                    "Return to Completed Books",
+                    "Return to Main Menu"
+                ]
+            )
+        ]
+            response = inquirer.prompt(questions)
+            if response["cb_return"] == "Return to Completed Books":
+                completed_main()
+            else:
+                main_menu()
+        
+        #view all completed books
+        def view_cb():
+            print("Here's a list of all the books you've finished reading:")
+            all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
+            print(all_cb)
+
+            cb_return_prompt()
+
+        def cool_cb_stats():
+            questions = [
+                inquirer.List(
+                    "cool_stats",
+                    message = "Alright, what do you want to know?",
+                    choices = [
+                        "How many books have I completed in total?",
+                        "How many total pages have I read across all completed books?",
+                        "Who is the author I've read the most of across all completed books?",
+                        "<-- Go Back"
+                    ]
+                )
+            ]
+            response = inquirer.prompt(questions)
+            if response["cool_stats"] == "How many books have I completed in total?":
+                # total_completed_books()
+                pass
+            elif response["cool_stats"] == "How many total pages have I read across all completed books?":
+                #calc_total_pages()
+                pass
+            elif response["cool_stats"] == "Who is the author I've read the most of across all completed books?":
+                #calc_top_author()
+                pass
+            else:
+                completed_main()
  
         print('''
 
