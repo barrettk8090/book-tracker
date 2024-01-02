@@ -35,10 +35,12 @@ def main():
             else:
                 exit()
 
+
         #View a list of all the books on your bookshelf. 
         def view_all():
             print(f"Here's a list of all the books on your bookshelf: \n{session.query(Book).all()}")
             ##note -- need to add a return prompt here
+            main_menu()
 
 
 ######################## WANT TO READ ########################

@@ -29,10 +29,12 @@ class Book(Base):
 
     def __repr__(self):
         return f'''
-        {self.title.upper()} by {self.author}.
-        {self.description}
-        Pages: {self.page_count}
-        Type: {self.type}
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        +    {self.title.upper()} by {self.author}.                    
+        +    Book description: {self.description}                      
+        +    Pages: {self.page_count}                                  
+        +    Type: {self.type}                                         
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         '''
 
 engine = create_engine('sqlite:///bookshelf.db')
