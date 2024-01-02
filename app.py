@@ -29,16 +29,18 @@ def main():
             elif response["starter_menu"] == "View or edit my want to read books.":
                 wtr_main()
             elif response["starter_menu"] == "View my currently reading books.":
-                pass
+                cr_main()
             elif response["starter_menu"] == "View my completed books.":
-                pass
+                completed_main()
             else:
                 exit()
 
         #View a list of all the books on your bookshelf. 
         def view_all():
             print(f"Here's a list of all the books on your bookshelf: \n{session.query(Book).all()}")
-#### WANT TO READ ####
+
+
+######################## WANT TO READ ########################
         def wtr_main():
             questions = [
                 inquirer.List(
@@ -69,8 +71,68 @@ def main():
             else:
                 main_menu()
 
+######################## CURRENTLY READING ########################
+        def cr_main():
+            questions = [
+                inquirer.List(
+                    "cr_main_menu",
+                    message = "What do you want to do with your currently reading books?",
+                    choices = [
+                        "View all my currently reading books.",
+                        "Update the progress on a book you're currently reading.",
+                        "Edit the details for a book you're currently reading",
+                        "Move a book from currently reading to completed.",
+                        "<-- Go Back."
+                    ]
+                )
+            ]
+            response = inquirer.prompt(questions)
+            if response["cr_main_menu"] == "View all my currently reading books.":
+                #view_cr()
+                pass
+            elif response["cr_main_menu"] == "Update the progress on a book you're currently reading.":
+                #update_cr_menu()
+                pass
+            elif response["cr_main_menu"] == "Edit the details for a book you're currently reading":
+                #edit_cr()
+                pass
+            elif response["cr_main_menu"] == "Move a book from currently reading to completed.":
+                #move_cr()
+                pass
+            else:
+                main_menu()
 
-        
+######################## COMPLETED BOOKZZZ ########################
+        def completed_main():
+            questions = [
+                inquirer.List(
+                    "completed_main_menu",
+                    message = "What do you want to do with your completed books?",
+                    choices = [
+                        "View all my completed books.",
+                        "Get cool stats on the books I've finished.",
+                        "Edit a book on your completed list",
+                        "Remove a book from your completed list.",
+                        "<-- Go Back."
+                    ]
+                )
+            ]
+            response = inquirer.prompt(questions)
+            if response["completed_main_menu"] == "View all my completed books.":
+                #view_cb()
+                pass
+            elif response["completed_main_menu"] == "Get cool stats on the books I've finished.":
+                #cool_cb_stats()
+                pass
+            elif response["completed_main_menu"] == "Edit a book on your completed list":
+                #edit_cb()
+                pass
+            elif response["completed_main_menu"] == "Remove a book from your completed list.":
+                #remove_cb
+                pass
+            else:
+                main_menu()
+ 
         print('''
 
 +++ !!!Welcome to GooderReads!!! +++
