@@ -29,7 +29,7 @@ class Book(Base):
 
     def __repr__(self):
         return f'''
-        {self.title} by {self.author}.
+        {self.title.upper()} by {self.author}.
         {self.description}
         Pages: {self.page_count}
         Type: {self.type}

@@ -38,6 +38,7 @@ def main():
         #View a list of all the books on your bookshelf. 
         def view_all():
             print(f"Here's a list of all the books on your bookshelf: \n{session.query(Book).all()}")
+            ##note -- need to add a return prompt here
 
 
 ######################## WANT TO READ ########################
@@ -57,10 +58,9 @@ def main():
             ]
             response = inquirer.prompt(questions)
             if response["wtr_main_menu"] == "View all my want to read books.":
-                # view_all_wtr()
-                pass
+                view_wtr()
             elif response["wtr_main_menu"] == "Add a book to my want to read list.":
-                # add_wtr()
+                add_wtr()
                 pass
             elif response["wtr_main_menu"] == "Edit a book currently in my want to read list":
                 #edit_wtr_menu()
@@ -70,6 +70,69 @@ def main():
                 pass
             else:
                 main_menu()
+
+         #set a method to return to wtr main or to program main menu
+        def wtr_return_prompt():
+            questions = [
+                inquirer.List(
+                "wtr_return",
+                message = "Do you want to return to the Want to Read selection screen, or back to the main menu?",
+                choices = [
+                    "Return to Want to Read",
+                    "Return to Main Menu"
+                ]
+            )
+        ]
+            response = inquirer.prompt(questions)
+            if response["wtr_return"] == "Return to Want to Read":
+                wtr_main()
+            else:
+                main_menu()
+
+        #view all the books on wtr list
+        def view_wtr():
+            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
+            print(all_wtr)
+
+            wtr_return_prompt()
+
+        #add a new book to the wtr list
+        def add_wtr():
+            new_title = input("What's the title of the book you want to read?: ")
+            new_author = input(f"Who is the author of {new_title}?: ")
+            new_description = input(f"OPTIONAL: Write a description for the book, {new_title}: ")
+            new_page_count = input(f"How many pages are in the book {new_title}?: ")
+
+            new_wtr = Book(
+                title = new_title,
+                author = new_author,
+                description = new_description,
+                page_count = new_page_count,
+                pages_read = 0,
+                type = "Want To Read",
+                star_rating = None,
+                personal_review = None,
+                bookshelf_id = 2
+            )
+
+            session.add(new_wtr)
+            session.commit()
+
+            print(f"Great, I've added the book, {new_title}, to your Want to Read list!")
+
+            wtr_return_prompt()
+
+        #edit the details of a book on your wtr list - select a book
+        def edit_wtr_menu():
+            questions = [
+                inquirer.List(
+                    "select_wtr_edit",
+                    message = "Which book would you like to edit?"
+                )
+            ]
+
+
+
 
 ######################## CURRENTLY READING ########################
         def cr_main():
@@ -88,8 +151,7 @@ def main():
             ]
             response = inquirer.prompt(questions)
             if response["cr_main_menu"] == "View all my currently reading books.":
-                #view_cr()
-                pass
+                view_cr()
             elif response["cr_main_menu"] == "Update the progress on a book you're currently reading.":
                 #update_cr_menu()
                 pass
@@ -101,6 +163,31 @@ def main():
                 pass
             else:
                 main_menu()
+
+        #set a method to return to cr main or to program main menu
+        def cr_return_prompt():
+            questions = [
+                inquirer.List(
+                "cr_return",
+                message = "Do you want to return to the Currently Reading selection screen, or back to the main menu?",
+                choices = [
+                    "Return to Currently Reading",
+                    "Return to Main Menu"
+                ]
+            )
+        ]
+            response = inquirer.prompt(questions)
+            if response["cr_return"] == "Return to Currently Reading":
+                cr_main()
+            else:
+                main_menu()
+
+        def view_cr():
+            print("Here's a list of all the books you're currently reading:")
+            all_cr = session.query(Book).filter(Book.bookshelf_id == 1).all()
+            print(all_cr)
+
+            cr_return_prompt()
 
 ######################## COMPLETED BOOKZZZ ########################
         def completed_main():
