@@ -298,16 +298,36 @@ def main():
             ]
             response = inquirer.prompt(questions)
             if response["cool_stats"] == "How many books have I completed in total?":
-                # total_completed_books()
-                pass
+                total_completed_books()
             elif response["cool_stats"] == "How many total pages have I read across all completed books?":
-                #calc_total_pages()
+                calc_total_pages()
                 pass
             elif response["cool_stats"] == "Who is the author I've read the most of across all completed books?":
                 #calc_top_author()
                 pass
             else:
                 completed_main()
+
+        def total_completed_books():
+            all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
+            print(f"Altogether, you've read and finished {len(all_cb)} books!")
+            cb_return_prompt()
+
+        #calculate the total number of pages someone has read across all their completed books
+            #more effecient example: https://www.phind.com/search?cache=myqxiy1stelsxf3v9i4t6e72 
+        def calc_total_pages():
+            all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
+            total_pages = 0;
+            i = 0
+            while i < len(all_cb):
+                total_pages += all_cb[i].page_count
+                i += 1
+            print(f"In total, you have read {total_pages} pages!")
+            cb_return_prompt()
+
+        #calculate the author that has been read the most 
+        def calc_top_author():
+            pass
  
         print('''
 
