@@ -61,13 +61,11 @@ def main():
                 view_wtr()
             elif response["wtr_main_menu"] == "Add a book to my want to read list.":
                 add_wtr()
-                pass
             elif response["wtr_main_menu"] == "Edit a book currently in my want to read list":
                 #edit_wtr_menu()
                 pass
             elif response["wtr_main_menu"] == "See a list of all the authors on my want to read list.":
-                #wtr_authors()
-                pass
+                wtr_authors()
             else:
                 main_menu()
 
@@ -122,14 +120,36 @@ def main():
 
             wtr_return_prompt()
 
-        #edit the details of a book on your wtr list - select a book
+        #NEEDS FINALIZING: edit the details of a book on your wtr list - select a book
         def edit_wtr_menu():
+            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
+            indiv_book = []
+            for book in all_wtr:
+                book.push(indiv_book)
+
             questions = [
                 inquirer.List(
                     "select_wtr_edit",
                     message = "Which book would you like to edit?"
                 )
             ]
+
+        def wtr_authors():
+            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
+            all_authors = []
+            i = 0
+            while i < len(all_wtr):
+                all_authors.append(all_wtr[i].author)
+                i += 1
+            print(set(all_authors))
+            # author_list = []
+            # for author in all_wtr.author:
+            #     author_list.append(author)
+            # unique_authors = set(author_list)
+            # print(f"Okay, here's a list of all the authors in your want to read list: {unique_authors}.")
+
+            # wtr_return_prompt()
+
 
 
 
