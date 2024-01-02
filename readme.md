@@ -23,6 +23,8 @@ raise ValueError("Not valid email)
 
 [ ] Get the total number of pages that you've read, either in total or as part of a specific year that you read them.
 
+[ ] Add a new bookshelf type, make that work somehow, and get a join table cookin!
+
 Stretch
 [ ] Add login/user functionality so that there can be multiple people accounts who have bookshelves
 [ ] Connect to OpenLibrary API to allow for searching(?) by a book title or author and get the description and other info so that you can automatically enter that information iunto the table without having to type anything. Query that database
