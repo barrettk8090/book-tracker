@@ -8,73 +8,24 @@ Base = declarative_base()
 class Bookshelf(Base):
     __tablename__ = "bookshelf" 
     id = Column(Integer, primary_key = True)
-    want_to_read_connection = relationship('WantToRead', back_populates="bookshelf_connection")
-    currently_reading_connection = relationship('CurrentlyReading', back_populates="bookshelf_connection")
-    completed_books_connection = relationship('CompletedBook', back_populates="bookshelf_connection")
-
-    def __repr__(self):
-        want_to_read_books = ", ".join([book.book_title for book in self.want_to_read_connection])
-        currently_reading_books = ", ".join([book.book_title for book in self.currently_reading_connection])
-        completed_books = ", ".join([book.book_title for book in self.completed_books_connection])
-
-        return f"Bookshelf(id={self.id}), WantToRead =[{want_to_read_books}], CurrentlyReading=[{currently_reading_books}], Completed=[{completed_books}]"
+    name = Column(String)
+    description = Column(String)
+    book_connection = relationship('Book', back_populates = "bookshelf_connection")
 
 
-class WantToRead(Base):
-    __tablename__ = "want to read"
-    id = Column(Integer, primary_key = True)
-    shelf_type = Column(String, default = "Want to Read")
-    book_title = Column(String, nullable = False)
-    book_author = Column(String, nullable = False)
-    book_description = Column(String)
+class Book(Base):
+    __tablename__ = "book"
+    id = Column(Integer, primary_key= True)
+    title = Column(String, nullable = False)
+    author = Column(String, nullable = False)
+    description = Column(String)
     page_count = Column(Integer)
-    bookshelf_id = Column(ForeignKey('bookshelf.id'))
-    bookshelf_connection = relationship('Bookshelf', back_populates="want_to_read_connection")
-
-    @validates("book_title", "book_author")
-    def validates_title_and_author(self, key, value):
-        if type(value) is str and 0<len(value):
-            return value
-        else:
-            raise ValueError(f'Sorry, that isnt a valid {value}')
-        #Working, but value isn't getting returned, need to fix
-        
-    @validates("page_count")
-    def validates_page_count(self, key, value):
-        if 0 < value and value <= 3000:
-            return value
-        elif value > 3001:
-            raise ValueError("It looks like you're trying to add a book that's longer than 3000 pages. You'll never read that, so it hasn't been added to your Want To Read list.")
-        else:
-            raise ValueError("Please enter a page count between 2 and 3000 pages.")
-    
-    def __repr__(self):
-        return f'{self.book_title}'
-
-class CurrentlyReading(Base):
-    __tablename__ = "currently reading"
-    id = Column(Integer, primary_key = True)
-    self_type = Column(String, default = "Currently Reading")
-    book_title = Column(String)
-    book_author = Column(String)
-    book_description = Column(String)
-    page_count = Column(Integer)
-    current_page = Column(Integer)
-    bookshelf_id = Column(ForeignKey('bookshelf.id'))
-    bookshelf_connection = relationship('Bookshelf', back_populates="currently_reading_connection")
-
-class CompletedBook(Base):
-    __tablename__ = "completed"
-    id = Column(Integer, primary_key = True)
-    self_type = Column(String, default= "Completed")
-    book_title = Column(String)
-    book_author = Column(String)
-    book_description = Column(String)
-    page_count = Column(Integer)
+    pages_read = Column(Integer)
+    type = Column(String)
     star_rating = Column(Integer)
     personal_review = Column(String)
     bookshelf_id = Column(ForeignKey('bookshelf.id'))
-    bookshelf_connection = relationship('Bookshelf', back_populates="completed_books_connection")
+    bookshelf_connection = relationship('Bookshelf', back_populates="book_connection")
 
 
 engine = create_engine('sqlite:///bookshelf.db')
