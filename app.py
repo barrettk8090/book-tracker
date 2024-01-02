@@ -142,13 +142,8 @@ def main():
                 all_authors.append(all_wtr[i].author)
                 i += 1
             print(set(all_authors))
-            # author_list = []
-            # for author in all_wtr.author:
-            #     author_list.append(author)
-            # unique_authors = set(author_list)
-            # print(f"Okay, here's a list of all the authors in your want to read list: {unique_authors}.")
+            wtr_return_prompt()
 
-            # wtr_return_prompt()
 
 
 
@@ -208,6 +203,27 @@ def main():
             print(all_cr)
 
             cr_return_prompt()
+
+        #NEEDS FIXING: update the current page number of a book you're reading.
+        def update_cr_menu():
+            all_cr = session.query(Book).filter(Book.bookshelf_id == 1).all()
+            if len(all_cr) == 1:
+                print("You only have one book that you're currently reading. Let's update the current page of that book.")
+
+                #See if there's only one book in CR - if so, immediately go into edit mode.
+                pass
+            else:
+                #If there's more than one book, ask user which book they want to update the progress of.
+                questions = [
+                    inquirer.List(
+                    "cr_update_select",
+                    message = "Which book do you want to update the progress for?",
+                    choices = [
+                        ""
+                    ]
+                )
+        ]
+
 
 ######################## COMPLETED BOOKZZZ ########################
         def completed_main():
