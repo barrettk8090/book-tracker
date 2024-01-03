@@ -143,7 +143,7 @@ def main():
                 del_wtr()
                 pass
             elif response["edit_wtr_menu"] == "Move a book from my Want to Read List to my Currently Reading list.":
-                # move_wtr()
+                move_wtr()
                 pass
             else:
                 wtr_main()
@@ -244,9 +244,8 @@ def main():
             else:
                 edit_wtr_menu()
 
-
+        #delete a book from want to read 
         def del_wtr():
-            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
             title_to_delete = input("Please type in the title of the book that you would like to delete: ")
             questions = [
                     inquirer.List(
@@ -260,22 +259,13 @@ def main():
                 ]
             response = inquirer.prompt(questions)
             if response["confirm_del"] == f"Yes, delete {title_to_delete}":
-                book_titles = []
-                for book in all_wtr:
-                    book_titles.append(book.title)
-                print(book_titles)
-
-                if title_to_delete in book_titles:
-                    print("Book title exists")
-                else: 
-                    print("Book title doesn't exit")
+                book_del = session.query(Book).filter(Book.title == title_to_delete).first()
+                print(book_del)
+                print("Okay, that book has now been permanently deleted from your Want to Read list.")
+                session.delete(book_del)
+                session.commit()
             else:
-                main_menu()
-
-
-            
-
-
+                wtr_main()
 
         #see all the authors that are on your want to read list
         def wtr_authors():
@@ -287,6 +277,11 @@ def main():
                 i += 1
             print(set(all_authors))
             wtr_return_prompt()
+
+        def move_wtr():
+            #should we maybe print a list of all the book titles here to make it easier to type?
+            title_to_move = input("Please type in the title of the book that you would like to move to Currently Reading: ")
+
 
 
 
