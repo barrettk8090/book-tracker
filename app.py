@@ -39,7 +39,6 @@ def main():
         #View a list of all the books on your bookshelf. 
         def view_all():
             print(f"Here's a list of all the books on your bookshelf: \n{session.query(Book).all()}")
-            ##note -- need to add a return prompt here
             main_menu()
 
 
@@ -323,13 +322,13 @@ def main():
             if response["cr_main_menu"] == "View all my currently reading books.":
                 view_cr()
             elif response["cr_main_menu"] == "Update the progress on a book you're currently reading.":
-                #update_cr_menu()
+                update_cr()
                 pass
             elif response["cr_main_menu"] == "Edit the details for a book you're currently reading":
-                #edit_cr()
+                edit_cr()
                 pass
             elif response["cr_main_menu"] == "Move a book from currently reading to completed.":
-                #move_cr()
+                move_cr()
                 pass
             else:
                 main_menu()
@@ -359,25 +358,74 @@ def main():
 
             cr_return_prompt()
 
-        #NEEDS FIXING: update the current page number of a book you're reading.
-        def update_cr_menu():
-            all_cr = session.query(Book).filter(Book.bookshelf_id == 1).all()
-            if len(all_cr) == 1:
-                print("You only have one book that you're currently reading. Let's update the current page of that book.")
+        #update the current page number of a book you're reading.
+        def update_cr():
+            print(f"Here's a list of all the books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
+            title_to_update = input("Please type the name of the book that you want to update the current page for: ")
+            book_edit = session.query(Book).filter(Book.title == title_to_update).first()
+            book_edit.pages_read = input("What page of the book are you on now?: ")
 
-                #See if there's only one book in CR - if so, immediately go into edit mode.
-                pass
-            else:
-                #If there's more than one book, ask user which book they want to update the progress of.
-                questions = [
+            print(f"Sweet! I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
+            cr_return_prompt()
+            
+                
+        def edit_cr():
+            print(f"Here are the books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
+            title_to_edit = input("Please type in the title of the book that you would like to edit: ")
+            questions = [
                     inquirer.List(
-                    "cr_update_select",
-                    message = "Which book do you want to update the progress for?",
+                        "confirm_edit",
+                        message = f"Confirming... Do you really want to edit the book, {title_to_edit}, from your Currently Reading List?",
+                        choices = [
+                            f"Yes, edit {title_to_edit}",
+                            f"No. Take me back home.",
+                        ]
+                    )
+                ]
+            response = inquirer.prompt(questions)
+            if response["confirm_edit"] == f"Yes, edit {title_to_edit}":
+                book_edit = session.query(Book).filter(Book.title == title_to_edit).first()
+                new_title = input("Confirm or edit the title of this book: ")
+                new_author = input("Confirm or edit the authors name: ")
+                new_description = input("Confirm or edit the book description: ")
+                new_page_count = input("Confirm or edit the books page count: ")
+                new_pages_read = input("Confirm or edit the current page that you're on: ")
+
+                book_edit.title = new_title
+                book_edit.author = new_author
+                book_edit.description = new_description
+                book_edit.page_count = new_page_count
+                book_edit.pages_read = new_pages_read
+
+                session.add(book_edit)
+                session.commit()
+                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
+                cr_return_prompt()
+
+        def move_cr():
+            print(f"Here are the books on your Currently Reading list: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
+            title_to_move = input("Please type in the title of the book that you would like to move to your Completed Books list. IMPORTANT: This action will automatically update the number of pages you've read to match the total pages in this book: ")
+            questions = [
+                inquirer.List(
+                    "confirm_move",
+                    message = f"Confirming... Do you really want to mark the book, {title_to_move}, as COMPLETE?",
                     choices = [
-                        ""
+                        f"Yes, I want to mark {title_to_move} as COMPLETE.",
+                        f"No. Take me back home."
                     ]
                 )
-        ]
+            ]
+            response = inquirer.prompt(questions)
+            if response["confirm_move"] == f"Yes, I want to mark {title_to_move} as COMPLETE.":
+                book_move = session.query(Book).filter(Book.title == title_to_move).first()
+                book_move.type = "Completed"
+                book_move.bookshelf_id = 3
+                book_move.pages_read = book_move.page_count
+                print(f"It's lit! Congrats on finishing the book, {book_move.title}! It's been moved from Currently Reading to Completed List.")
+                print(f"{book_move}")
+                #Check to see if its actually updated in the DB or not... might need session.add()commit()
+                cr_return_prompt()
+
 
 
 ######################## COMPLETED BOOKZZZ ########################
@@ -488,7 +536,7 @@ def main():
             questions = [
                     inquirer.List(
                         "confirm_edit",
-                        message = f"Confirming... Do you really want to edit the book, {title_to_edit}, from your Currently Reading List?",
+                        message = f"Confirming... Do you really want to edit the book, {title_to_edit}, from your Completed Book List?",
                         choices = [
                             f"Yes, edit {title_to_edit}",
                             f"No. Take me back home.",

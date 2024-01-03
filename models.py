@@ -90,7 +90,8 @@ class Book(Base):
         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         +    {self.title.upper()} by {self.author}.                    
         +    Book description: {self.description}                      
-        +    Pages: {self.page_count}                                  
+        +    Pages: {self.page_count} 
+        +    Current Page: {self.pages_read}                                 
         +    Type: {self.type}                                         
         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         '''
