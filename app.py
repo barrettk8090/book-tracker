@@ -120,7 +120,7 @@ def main():
 
             wtr_return_prompt()
 
-        #NEEDS FINALIZING: edit the details of a book on your wtr list - select a book
+        #edit the details of a book on your wtr list - edit, delete, or move
         def edit_wtr_menu():
             questions = [
                 inquirer.List(
@@ -277,6 +277,7 @@ def main():
             print(set(all_authors))
             wtr_return_prompt()
 
+        #move a want to read book to currently reading list
         def move_wtr():
             print(f"Books on your Want to Read list: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
             title_to_move = input("Please type in the title of the book that you would like to move to Currently Reading: ")
@@ -351,6 +352,7 @@ def main():
             else:
                 main_menu()
 
+        #view all books on your currently reading list
         def view_cr():
             print("Here's a list of all the books you're currently reading:")
             all_cr = session.query(Book).filter(Book.bookshelf_id == 1).all()
@@ -368,7 +370,7 @@ def main():
             print(f"Sweet! I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
             cr_return_prompt()
             
-                
+        #edit the details of a book you're currently reading:
         def edit_cr():
             print(f"Here are the books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
             title_to_edit = input("Please type in the title of the book that you would like to edit: ")
@@ -402,6 +404,7 @@ def main():
                 print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
                 cr_return_prompt()
 
+        #move a book from currently reading to your completed books list
         def move_cr():
             print(f"Here are the books on your Currently Reading list: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
             title_to_move = input("Please type in the title of the book that you would like to move to your Completed Books list. IMPORTANT: This action will automatically update the number of pages you've read to match the total pages in this book: ")
@@ -459,6 +462,7 @@ def main():
             else:
                 main_menu()
 
+        #create a method to return back to completed_main() or main_menu() 
         def cb_return_prompt():
             questions = [
                 inquirer.List(
@@ -484,6 +488,7 @@ def main():
 
             cb_return_prompt()
 
+        #get sick stats regarding your completed books
         def cool_cb_stats():
             questions = [
                 inquirer.List(
@@ -508,7 +513,8 @@ def main():
                 pass
             else:
                 completed_main()
-
+        
+        #Get the number of total books you've completed
         def total_completed_books():
             all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
             print(f"Altogether, you've read and finished {len(all_cb)} books!")
@@ -530,7 +536,7 @@ def main():
         def calc_top_author():
             pass
 
-        #edit a book you're currently reading
+        #edit a book you've completed
         def edit_cb():
             title_to_edit = input("Please type in the title of the book that you would like to edit: ")
             questions = [
@@ -570,6 +576,7 @@ def main():
             else:
                 completed_main()
 
+        #remove a book from your completed books list
         def remove_cb():
             print(f"Here's a list of your current completed books: {session.query(Book).filter(Book.bookshelf_id == 3).all()}")
             title_to_delete = input("Please type in the title of the book you want to delete: ")
