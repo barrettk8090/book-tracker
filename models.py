@@ -66,9 +66,20 @@ class Book(Base):
         else:
             raise ValueError(f"Please enter a valid {value}")
         
+    #stretch - add float w one decimal place eg. 4.5 2.7
     @validates("star_rating")
-    def validate_star_rating(self, key, value)
-        
+    def validate_star_rating(self, key, value):
+        if type(value) is int and 0<=value<=5 or value == None:
+            return value
+        else:
+            raise ValueError(f"Please enter a {value} that is between 0 and 5 with no decimal places.")
+
+    @validates("personal_review")
+    def validate_personal_rev(self, key, value):
+        if type(value) is str and 1<len(value) or value == None:
+            return value
+        else:
+            raise ValueError(f"Please enter a {value} that's longer than one character.")
     
 
     def __repr__(self):
