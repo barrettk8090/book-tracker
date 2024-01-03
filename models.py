@@ -12,6 +12,13 @@ class Bookshelf(Base):
     description = Column(String)
     book_connection = relationship('Book', back_populates = "bookshelf_connection")
 
+    @validates("name", "description")
+    def validate_name_desc(self, key, value):
+        if type(value) is str and 3<len(value):
+            return value
+        else:
+            raise ValueError(f"Sorry, that is not a valid {value}")
+
 
 class Book(Base):
     __tablename__ = "book"
@@ -26,6 +33,43 @@ class Book(Base):
     personal_review = Column(String)
     bookshelf_id = Column(ForeignKey('bookshelf.id'))
     bookshelf_connection = relationship('Bookshelf', back_populates="book_connection")
+
+    @validates("title", "author")
+    def validate_title_author(self, key, value):
+        if type(value) is str and 0<len(value):
+            return value
+        else:
+            raise ValueError(f"Sorry, but you must enter a {value}. Please try again.")
+        
+    @validates("page_count")
+    def validate_page_count(self, key, value):
+        if type(value) is int and 0 < value:
+            return value
+        else:
+            raise ValueError(f"Please enter a value for page count so that we can track your progress later on.")
+    
+    @validates("pages_read")
+    def validate_pages_read(self, key, value):
+        if type(value) is int and 0<=value:
+            return value
+        elif type(value) is str and value == "":
+            value = 0 
+            return value
+        else:
+            raise ValueError(f"Please enter a valid {value}. If you haven't read any pages yet, you can enter 0 or leave the field blank, WITHOUT any spaces, please.")
+        
+    #strech goal: validate type--> if type text already exists in table return value. If it doesnt exist yet, raise an error and ask if user wants to create a new type first. Then go thru type recreation and start over current process.
+    @validates("type")
+    def validate_type(self, key, value):
+        if type(value) is str and 0<len(value):
+            return value
+        else:
+            raise ValueError(f"Please enter a valid {value}")
+        
+    @validates("star_rating")
+    def validate_star_rating(self, key, value)
+        
+    
 
     def __repr__(self):
         return f'''

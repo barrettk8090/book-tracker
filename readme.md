@@ -21,7 +21,7 @@ raise ValueError("Not valid email)
 
 [ ] Add columns and auto widths to returns (e.g. when learning plain SQL there was a way to show the table headers HEADERS ON and see things in a prettier way than just a list)
 
-[ ] Get the total number of pages that you've read, either in total or as part of a specific year that you read them.
+[X] Get the total number of pages that you've read, either in total or as part of a specific year that you read them.
 
 [ ] Add a new bookshelf type, make that work somehow, and get a join table cookin!
 
