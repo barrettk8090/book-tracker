@@ -279,7 +279,7 @@ def main():
             wtr_return_prompt()
 
         def move_wtr():
-            #should we maybe print a list of all the book titles here to make it easier to type?
+            print(f"Books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
             title_to_move = input("Please type in the title of the book that you would like to move to Currently Reading: ")
             questions = [
                     inquirer.List(
