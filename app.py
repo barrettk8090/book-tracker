@@ -147,101 +147,36 @@ def main():
             else:
                 wtr_main()
 
-        #stretch - fix with loops --> Starter code below VVVV
-                # could ALSO change this to be like... "please type the book title you want to edit". Probs a better approach than the below
+        #edit a book on your Want to Read list
         def edit_wtr_details_menu():
-            # all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
-            # i = 0 
-            # while i < len(all_wtr):
-                
-            #     questions = [
-            #         inquirer.List(
-            #             "edit_wtr_details_menu",
-            #             message = "Which book do you want to edit?",
-            #             choices = [
-            #                 f"{all_wtr[i].title}",
-            #                 "<-- Go Back"
-            #             ]
-            #         )
-            #     ]
-                
-            #     i += 1
-            # response = inquirer.prompt(questions)
-            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
+            print(f"Here are the books that are on your Want To Read list: {session.query(Book).filter(Book.bookshelf_id == 2)}")
+            title_to_edit = input("Please type in the title of the book that you would like to edit: ")
             questions = [
-                    inquirer.List(
-                        "edit_wtr_details_menu",
-                        message = "Which book do you want to edit?",
-                        choices = [
-                            f"{all_wtr[0].title}",
-                            f"{all_wtr[1].title}",
-                            f"{all_wtr[2].title}",
-                            # f"{all_wtr[3].title}",
-                            # f"{all_wtr[4].title}",
-                            "<-- Go Back"
-                        ]
-                    )
-                ]
+                inquirer.List(
+                    "confirm_edit_wtr",
+                    message = f"Confirming... do you really want to edit the book, {title_to_edit}, on your Want to Read list?"
+                    choices = [
+                         f"Yes, edit {title_to_edit}",
+                         f"No. Take me back home.",
+                    ]
+                )
+            ]
             response = inquirer.prompt(questions)
-            if response ["edit_wtr_details_menu"] == f"{all_wtr[0].title}":
+            if response["confirm_edit"] == f"Yes, edit {title_to_edit}":
+                book_edit = session.query(Book).filter(Book.title == title_to_edit).first()
                 new_title = input("Confirm or edit the title of this book: ")
                 new_author = input("Confirm or edit the authors name: ")
                 new_description = input("Confirm or edit the book description: ")
                 new_page_count = input("Confirm or edit the books page count: ")
 
-                session.delete(all_wtr[0])
+                book_edit.title = new_title
+                book_edit.author = new_author
+                book_edit.description = new_description
+                book_edit.page_count = new_page_count
 
-                all_wtr[0].title = new_title
-                all_wtr[0].author = new_author
-                all_wtr[0].description = new_description
-                all_wtr[0].page_count = new_page_count
-
-            
-                session.add(all_wtr[0])
+                session.add(book_edit)
                 session.commit()
-
-                print(f"Great! I've modified that book in your Want to Read list. Here's the new book info:\n {all_wtr[0]}" )
-                wtr_return_prompt()
-            elif response ["edit_wtr_details_menu"] == f"{all_wtr[1].title}":
-                new_title = input("Confirm or edit the title of this book: ")
-                new_author = input("Confirm or edit the authors name: ")
-                new_description = input("Confirm or edit the book description: ")
-                new_page_count = input("Confirm or edit the books page count: ")
-
-                session.delete(all_wtr[1])
-                
-                all_wtr[1].title = new_title
-                all_wtr[1].author = new_author
-                all_wtr[1].description = new_description
-                all_wtr[1].page_count = new_page_count
-
-            
-                session.add(all_wtr[1])
-                session.commit()
-
-                print(f"Great! I've modified that book in your Want to Read list. Here's the new book info:\n {all_wtr[1]}" )
-                wtr_return_prompt()
-            elif response ["edit_wtr_details_menu"] == f"{all_wtr[2].title}":
-                new_title = input("Confirm or edit the title of this book: ")
-                new_author = input("Confirm or edit the authors name: ")
-                new_description = input("Confirm or edit the book description: ")
-                new_page_count = input("Confirm or edit the books page count: ")
-
-                session.delete(all_wtr[2])
-                
-                all_wtr[2].title = new_title
-                all_wtr[2].author = new_author
-                all_wtr[2].description = new_description
-                all_wtr[2].page_count = new_page_count
-
-            
-                session.add(all_wtr[2])
-                session.commit()
-
-                print(f"Great! I've modified that book in your Want to Read list. Here's the new book info:\n {all_wtr[2]}" )
-                wtr_return_prompt()
-            else:
-                edit_wtr_menu()
+                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}") 
 
         #delete a book from want to read 
         def del_wtr():
