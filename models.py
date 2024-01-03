@@ -45,6 +45,8 @@ class Book(Base):
     def validate_page_count(self, key, value):
         if type(value) is int and 0 < value:
             return value
+        elif type(value) is str and 0<=len(value):
+            return int(value)
         else:
             raise ValueError(f"Please enter a value for page count so that we can track your progress later on.")
     

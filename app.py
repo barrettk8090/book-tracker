@@ -64,14 +64,13 @@ def main():
             elif response["wtr_main_menu"] == "Add a book to my want to read list.":
                 add_wtr()
             elif response["wtr_main_menu"] == "Edit a book currently in my want to read list":
-                #edit_wtr_menu()
-                pass
+                edit_wtr_menu()
             elif response["wtr_main_menu"] == "See a list of all the authors on my want to read list.":
                 wtr_authors()
             else:
                 main_menu()
 
-         #set a method to return to wtr main or to program main menu
+        #set a method to return to wtr main or to program main menu
         def wtr_return_prompt():
             questions = [
                 inquirer.List(
@@ -124,17 +123,30 @@ def main():
 
         #NEEDS FINALIZING: edit the details of a book on your wtr list - select a book
         def edit_wtr_menu():
-            all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
-            indiv_book = []
-            for book in all_wtr:
-                book.push(indiv_book)
-
             questions = [
                 inquirer.List(
-                    "select_wtr_edit",
-                    message = "Which book would you like to edit?"
+                    "edit_wtr_menu",
+                    message = "What do you want to do?"
+                    choices = [
+                        "Edit the details for a book that's currently on my Want to Read list",
+                        "Delete a book from my Want to Read list",
+                        "Move a book from my Want to Read List to my Currently Reading list.", 
+                        "<-- Go Back"
+                    ]
                 )
             ]
+            response = inquirer.prompt(questions)
+            if response["edit_wtr_menu"] == "Edit the details for a book that's currently on my Want to Read list":
+                # edit_wtr_details_menu()
+                pass
+            elif response["edit_wtr_menu"] == "Delete a book from my Want to Read list":
+                # del_wtr()
+                pass
+             elif response["edit_wtr_menu"] == "Move a book from my Want to Read List to my Currently Reading list.":
+                # move_wtr()
+                pass
+            else:
+                wtr_main()
 
         def wtr_authors():
             all_wtr = session.query(Book).filter(Book.bookshelf_id == 2).all()
@@ -332,6 +344,14 @@ def main():
         print('''
 
 +++ !!!Welcome to GooderReads!!! +++
+               ___________
+              /           \
+              |            |
+              |       ___
+              |      |    \
+              |            |
+              |            |
+              \____________/
 
       ''')
     main_menu()
