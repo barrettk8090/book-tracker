@@ -154,7 +154,7 @@ def main():
             questions = [
                 inquirer.List(
                     "confirm_edit_wtr",
-                    message = f"Confirming... do you really want to edit the book, {title_to_edit}, on your Want to Read list?"
+                    message = f"Confirming... do you really want to edit the book, {title_to_edit}, on your Want to Read list?",
                     choices = [
                          f"Yes, edit {title_to_edit}",
                          f"No. Take me back home.",
@@ -177,6 +177,7 @@ def main():
                 session.add(book_edit)
                 session.commit()
                 print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}") 
+                wtr_return_prompt()
 
         #delete a book from want to read 
         def del_wtr():
