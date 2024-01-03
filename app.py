@@ -149,7 +149,7 @@ def main():
 
         #edit a book on your Want to Read list
         def edit_wtr_details_menu():
-            print(f"Here are the books that are on your Want To Read list: {session.query(Book).filter(Book.bookshelf_id == 2)}")
+            print(f"Here are the books that are on your Want To Read list: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
             title_to_edit = input("Please type in the title of the book that you would like to edit: ")
             questions = [
                 inquirer.List(
@@ -162,7 +162,7 @@ def main():
                 )
             ]
             response = inquirer.prompt(questions)
-            if response["confirm_edit"] == f"Yes, edit {title_to_edit}":
+            if response["confirm_edit_wtr"] == f"Yes, edit {title_to_edit}":
                 book_edit = session.query(Book).filter(Book.title == title_to_edit).first()
                 new_title = input("Confirm or edit the title of this book: ")
                 new_author = input("Confirm or edit the authors name: ")
@@ -178,9 +178,12 @@ def main():
                 session.commit()
                 print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}") 
                 wtr_return_prompt()
+            else:
+                wtr_main()
 
         #delete a book from want to read 
         def del_wtr():
+            print(f"Here are the books that are on your Want To Read list: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
             title_to_delete = input("Please type in the title of the book that you would like to delete: ")
             questions = [
                     inquirer.List(
@@ -234,6 +237,8 @@ def main():
                 book_move.bookshelf_id = 1
                 page_q = input("Working on moving... Please enter what page you're currently on for this book (if 0, enter 0): ")
                 book_move.pages_read = int(page_q)
+                session.add(book_move)
+                session.commit()
                 print(f"Thanks! {title_to_move} has been moved from your Want to Read list to your Currently Reading list.")
                 print(book_move)
                 wtr_return_prompt()
@@ -474,6 +479,7 @@ def main():
 
         #edit a book you've completed
         def edit_cb():
+            print(f"Here are the books on your Completed Books list: {session.query(Book).filter(Book.bookshelf_id == 3).all()}")
             title_to_edit = input("Please type in the title of the book that you would like to edit: ")
             questions = [
                     inquirer.List(
@@ -501,7 +507,7 @@ def main():
                 book_edit.page_count = new_page_count
                 book_edit.pages_read = new_page_count
                 book_edit.star_rating = int(new_star_rating)
-                book_edit.new_personal_review = new_personal_review
+                book_edit.personal_review = new_personal_review
 
                 session.add(book_edit)
                 session.commit()
