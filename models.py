@@ -19,7 +19,6 @@ class Bookshelf(Base):
         else:
             raise ValueError(f"Sorry, that is not a valid {value}")
 
-
 class Book(Base):
     __tablename__ = "book"
     id = Column(Integer, primary_key = True)
@@ -54,6 +53,8 @@ class Book(Base):
     def validate_pages_read(self, key, value):
         if type(value) is int and 0<=value:
             return value
+        elif type(value) is str and 0<=len(value):
+            return int(value)
         elif type(value) is str and value == "":
             value = 0 
             return value

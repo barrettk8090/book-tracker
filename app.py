@@ -279,7 +279,7 @@ def main():
             wtr_return_prompt()
 
         def move_wtr():
-            print(f"Books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
+            print(f"Books on your Want to Read list: {session.query(Book).filter(Book.bookshelf_id == 2).all()}")
             title_to_move = input("Please type in the title of the book that you would like to move to Currently Reading: ")
             questions = [
                     inquirer.List(
@@ -303,20 +303,6 @@ def main():
                 wtr_return_prompt()
             else:
                 wtr_main()
-
-
-            #     print(book_move)
-            #     print("Okay, that book has now been permanently deleted from your Want to Read list.")
-            #     session.delete(book_del)
-            #     session.commit()
-            # else:
-            #     wtr_main()
-
-
-
-
-
-
 
 ######################## CURRENTLY READING ########################
         def cr_main():
@@ -417,10 +403,10 @@ def main():
                 cool_cb_stats()
                 pass
             elif response["completed_main_menu"] == "Edit a book on your completed list":
-                #edit_cb()
+                edit_cb()
                 pass
             elif response["completed_main_menu"] == "Remove a book from your completed list.":
-                #remove_cb
+                remove_cb()
                 pass
             else:
                 main_menu()
@@ -495,7 +481,70 @@ def main():
         #calculate the author that has been read the most 
         def calc_top_author():
             pass
- 
+
+        #edit a book you're currently reading
+        def edit_cb():
+            title_to_edit = input("Please type in the title of the book that you would like to edit: ")
+            questions = [
+                    inquirer.List(
+                        "confirm_edit",
+                        message = f"Confirming... Do you really want to edit the book, {title_to_edit}, from your Currently Reading List?",
+                        choices = [
+                            f"Yes, edit {title_to_edit}",
+                            f"No. Take me back home.",
+                        ]
+                    )
+                ]
+            response = inquirer.prompt(questions)
+            if response["confirm_edit"] == f"Yes, edit {title_to_edit}":
+                book_edit = session.query(Book).filter(Book.title == title_to_edit).first()
+                new_title = input("Confirm or edit the title of this book: ")
+                new_author = input("Confirm or edit the authors name: ")
+                new_description = input("Confirm or edit the book description: ")
+                new_page_count = input("Confirm or edit the books page count: ")
+                new_star_rating = input("Confirm or edit the star rating (0 - 5) for this book: ")
+                new_personal_review = input("Confirm or edit your personal review for this book: ")
+
+                book_edit.title = new_title
+                book_edit.author = new_author
+                book_edit.description = new_description
+                book_edit.page_count = new_page_count
+                book_edit.pages_read = new_page_count
+                book_edit.star_rating = int(new_star_rating)
+                book_edit.new_personal_review = new_personal_review
+
+                session.add(book_edit)
+                session.commit()
+
+                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
+
+                cb_return_prompt()
+            else:
+                completed_main()
+
+        def remove_cb():
+            print(f"Here's a list of your current completed books: {session.query(Book).filter(Book.bookshelf_id == 3).all()}")
+            title_to_delete = input("Please type in the title of the book you want to delete: ")
+            questions = [
+                inquirer.List(
+                    "confirm_del",
+                    message = f"Confirming... do you really want to permanently delete the book, {title_to_delete}, from your Completed Books list?",
+                    choices = [
+                        f"Yes, delete {title_to_delete}",
+                        f"No. Take me back home."
+                    ]
+                )
+            ]
+            response = inquirer.prompt(questions)
+            if response["confirm_del"] == f"Yes, delete {title_to_delete}":
+                book_del = session.query(Book).filter(Book.title == title_to_delete).first()
+                print("Okay, that book has now been permanently deleted from your Completed Books list.")
+                session.delete(book_del)
+                session.commit()
+                cb_return_prompt()
+            else:
+                completed_main()
+            
         print('''
 
 +++ !!!Welcome to GooderReads!!! +++
