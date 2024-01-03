@@ -260,10 +260,10 @@ def main():
             response = inquirer.prompt(questions)
             if response["confirm_del"] == f"Yes, delete {title_to_delete}":
                 book_del = session.query(Book).filter(Book.title == title_to_delete).first()
-                print(book_del)
                 print("Okay, that book has now been permanently deleted from your Want to Read list.")
                 session.delete(book_del)
                 session.commit()
+                wtr_return_prompt()
             else:
                 wtr_main()
 
@@ -281,6 +281,36 @@ def main():
         def move_wtr():
             #should we maybe print a list of all the book titles here to make it easier to type?
             title_to_move = input("Please type in the title of the book that you would like to move to Currently Reading: ")
+            questions = [
+                    inquirer.List(
+                        "confirm_move",
+                        message = f"Confirming... Do you really want to move {title_to_move} to your Currently Reading list?",
+                        choices = [
+                            f"Yes, move {title_to_move} to Currently Reading",
+                            f"No. Take me back home.",
+                        ]
+                    )
+                ]
+            response = inquirer.prompt(questions)
+            if response["confirm_move"] == f"Yes, move {title_to_move} to Currently Reading":
+                book_move = session.query(Book).filter(Book.title == title_to_move).first()
+                book_move.type = "Currently Reading"
+                book_move.bookshelf_id = 1
+                page_q = input("Working on moving... Please enter what page you're currently on for this book (if 0, enter 0): ")
+                book_move.pages_read = int(page_q)
+                print(f"Thanks! {title_to_move} has been moved from your Want to Read list to your Currently Reading list.")
+                print(book_move)
+                wtr_return_prompt()
+            else:
+                wtr_main()
+
+
+            #     print(book_move)
+            #     print("Okay, that book has now been permanently deleted from your Want to Read list.")
+            #     session.delete(book_del)
+            #     session.commit()
+            # else:
+            #     wtr_main()
 
 
 
