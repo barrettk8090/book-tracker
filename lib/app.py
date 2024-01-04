@@ -309,8 +309,38 @@ def main():
             book_edit = session.query(Book).filter(Book.title == title_to_update).first()
             book_edit.pages_read = input("What page of the book are you on now?: ")
 
-            print(f"Sweet! I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
-            cr_return_prompt()
+            #check to see if the user has read all the pages in the book. If so, confirm and move to completed books.
+            if book_edit.pages_read == book_edit.page_count:
+                questions = [
+                    inquirer.List(
+                        "move_to_complete",
+                        message = f"Nice! Based on the page number you entered, it looks like you've finished the book, {title_to_update}! Do you want to move it to your Completed Books list?",
+                        choices = [
+                            f"Yes! I've finished {title_to_update} and I want to mark it as COMPLETE.",
+                            "No, I've mistyped. Take me back to the main Currently Reading selection."
+                        ]
+                    )
+                ]
+                response = inquirer.prompt(questions)
+                if response["move_to_complete"] == f"Yes! I've finished {title_to_update} and I want to mark it as COMPLETE.":
+                    new_star_rating = input("Sweet! Now that you've finished, please rate the book betwee 0 - 5 stars: ")
+                    new_personal_review = input("If desired, please also leave a written personal review of the book: ")
+                    book_edit.type = "Completed"
+                    book_edit.bookshelf_id = 3
+                    book_edit.pages_read = book_edit.page_count
+                    book_edit.star_rating = int(new_star_rating)
+                    book_edit.personal_review = new_personal_review
+                    session.add(book_edit)
+                    session.commit()
+                    print(f"It's lit! Congrats on finishing the book, {book_edit.title}! It's been moved from Currently Reading to Completed List.")
+                    cr_return_prompt()
+                else:
+                    cr_main()
+            else:
+                session.add(book_edit)
+                session.commit()
+                print(f"Sweet! I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
+                cr_return_prompt()
             
         #edit the details of a book you're currently reading:
         def edit_cr():
@@ -345,6 +375,8 @@ def main():
                 session.commit()
                 print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
                 cr_return_prompt()
+            else: 
+                cr_main()
 
         #move a book from currently reading to your completed books list
         def move_cr():
