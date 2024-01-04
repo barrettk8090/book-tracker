@@ -5,11 +5,12 @@ Welcome to GooderReads! This app is built in Python, with SQLAlchemy and the Inq
 ## Running GooderReads
 
 To run the CLI program, download or clone the file and the navigate to the project directory. In the terminal, run
-'''
+
+```
 pipenv install
 pipenv shell
 python3 lib/app.py
-'''
+```
 
 Once the program is running, use the arrow keys in the main menu to navigate through the selection choices. User ENTER to select a choice, and add input when prompted.
 
