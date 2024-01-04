@@ -301,8 +301,7 @@ def main():
 
             cr_return_prompt()
 
-    #STRETCH -- IF currently reading total matches the total number of pages, ask user if they want to move it to their completed pile!!!
-        #update the current page number of a book you're reading.
+        #update the page progress on a book that's in currently reading
         def update_cr():
             print(f"Here's a list of all the books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
             title_to_update = input("Please type the name of the book that you want to update the current page for: ")
@@ -395,12 +394,17 @@ def main():
             response = inquirer.prompt(questions)
             if response["confirm_move"] == f"Yes, I want to mark {title_to_move} as COMPLETE.":
                 book_move = session.query(Book).filter(Book.title == title_to_move).first()
+                new_star_rating = input("Sweet! Now that you've finished, please rate the book betwee 0 - 5 stars: ")
+                new_personal_review = input("If desired, please also leave a written personal review of the book: ")
                 book_move.type = "Completed"
                 book_move.bookshelf_id = 3
                 book_move.pages_read = book_move.page_count
+                book_move.star_rating = int(new_star_rating)
+                book_move.personal_review = new_personal_review
+                session.add(book_move)
+                session.commit()
                 print(f"It's lit! Congrats on finishing the book, {book_move.title}! It's been moved from Currently Reading to Completed List.")
                 print(f"{book_move}")
-                #Check to see if its actually updated in the DB or not... might need session.add()commit()
                 cr_return_prompt()
 
 
