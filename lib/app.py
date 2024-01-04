@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base, validates
-from models import *
+from models.models import *
 import inquirer
 
 engine = create_engine('sqlite:///bookshelf.db')
@@ -301,6 +301,7 @@ def main():
 
             cr_return_prompt()
 
+    #STRETCH -- IF currently reading total matches the total number of pages, ask user if they want to move it to their completed pile!!!
         #update the current page number of a book you're reading.
         def update_cr():
             print(f"Here's a list of all the books you're currently reading: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")

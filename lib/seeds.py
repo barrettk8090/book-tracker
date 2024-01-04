@@ -1,4 +1,4 @@
-from models import *
+from models.models import *
 
 if __name__ == '__main__':
     Bookshelf.__table__.drop(engine)
