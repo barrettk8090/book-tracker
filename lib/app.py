@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base, validates
 from models.models import *
+from collections import Counter
 import inquirer
 
 engine = create_engine('sqlite:///bookshelf.db')
@@ -309,7 +310,7 @@ def main():
             book_edit.pages_read = input("What page of the book are you on now?: ")
 
             #check to see if the user has read all the pages in the book. If so, confirm and move to completed books.
-            if book_edit.pages_read == book_edit.page_count:
+            if book_edit.pages_read == book_edit.page_count or book_edit.pages_read > book_edit.page_count:
                 questions = [
                     inquirer.List(
                         "move_to_complete",
@@ -487,7 +488,7 @@ def main():
                 calc_total_pages()
                 pass
             elif response["cool_stats"] == "Who is the author I've read the most of across all completed books?":
-                #calc_top_author()
+                calc_top_author()
                 pass
             else:
                 completed_main()
@@ -512,7 +513,16 @@ def main():
 
         #calculate the author that has been read the most 
         def calc_top_author():
-            pass
+            all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
+            all_authors = []
+            i = 0
+            while i < len(all_cb):
+                all_authors.append(all_cb[i].author)
+                i+=1
+            author_counts = Counter(all_authors)
+            top_author = author_counts.most_common(1)
+            print(f"Your top author in your Completed Books list is {top_author[0][0]}")  
+            cb_return_prompt()
 
         #edit a book you've completed
         def edit_cb():
