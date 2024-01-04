@@ -86,14 +86,56 @@ class Book(Base):
     
 
     def __repr__(self):
-        return f'''
-        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        +    {self.title.upper()} by {self.author}.                    
-        +    Book description: {self.description}                      
-        +    Pages: {self.page_count} 
-        +    Current Page: {self.pages_read}                                 
-        +    Type: {self.type}                                         
-        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        '''
+        #return specific for Currently Reading
+        if self.bookshelf_id == 1:
+             return f'''
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            +    {self.title.upper()} by {self.author}.                    
+            +    Book description: {self.description}                      
+            +    Total Pages: {self.page_count} 
+            +    Current Page: {self.pages_read}                                 
+            +    Type: {self.type}       
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            '''
+        #return specific for Want to Read
+        elif self.bookshelf_id == 2:
+             return f'''
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            +    {self.title.upper()} by {self.author}.                    
+            +    Book description: {self.description}                      
+            +    Pages: {self.page_count}                                
+            +    Type: {self.type}      
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            '''
+        #return specific for Completed Books
+        elif self.bookshelf_id == 3:
+             return f'''
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            +    {self.title.upper()} by {self.author}.                    
+            +    Book description: {self.description}                      
+            +    Total Pages Read: {self.page_count}                              
+            +    Type: {self.type}   
+            +    Star Rating Out of 5: {self.star_rating}
+            +    Personal Review: {self.personal_review} 
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            '''
+        else:
+            return f'''
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            +    {self.title.upper()} by {self.author}.                    
+            +    Book description: {self.description}                      
+            +    Pages: {self.page_count} 
+            +    Current Page: {self.pages_read}                                 
+            +    Type: {self.type}    
+                                                 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            '''
 
 engine = create_engine('sqlite:///bookshelf.db')

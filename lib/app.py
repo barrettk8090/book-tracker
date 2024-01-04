@@ -43,7 +43,7 @@ def main():
             main_menu()
 
 
-######################## WANT TO READ ########################
+#################################################### WANT TO READ ####################################################
         def wtr_main():
             questions = [
                 inquirer.List(
@@ -246,7 +246,7 @@ def main():
             else:
                 wtr_main()
 
-######################## CURRENTLY READING ########################
+#################################################### CURRENTLY READING ####################################################
         def cr_main():
             questions = [
                 inquirer.List(
@@ -339,7 +339,67 @@ def main():
             else:
                 session.add(book_edit)
                 session.commit()
-                print(f"Sweet! I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
+                percent_complete = int(((book_edit.pages_read) / (book_edit.page_count))*100)
+                def progress_bar():
+                    if percent_complete == 0:
+                        return '|                        | 0% Complete' 
+                    elif 0 < percent_complete <= 4:
+                        return f'|█                       | {percent_complete}% Complete'
+                    elif 4 < percent_complete <= 8:
+                        return f'|██                      | {percent_complete}% Complete'
+                    elif 8 < percent_complete <= 12:
+                        return f'|███                     | {percent_complete}% Complete'
+                    elif 12 < percent_complete <= 16:
+                        return f'|████                    | {percent_complete}% Complete'
+                    elif 16 < percent_complete <= 20:
+                        return f'|█████                   | {percent_complete}% Complete'
+                    elif 20 < percent_complete <= 24:
+                        return f'|██████                  | {percent_complete}% Complete'
+                    elif 24 < percent_complete <= 28:
+                        return f'|███████                 | {percent_complete}% Complete'
+                    elif 28 < percent_complete <= 32:
+                        return f'|████████                | {percent_complete}% Complete'
+                    elif 32 < percent_complete <= 36:
+                        return f'|█████████               | {percent_complete}% Complete'
+                    elif 36 < percent_complete <= 40:
+                        return f'|██████████              | {percent_complete}% Complete'
+                    elif 40 < percent_complete <= 44:
+                        return f'|██████████              | {percent_complete}% Complete'
+                    elif 44 < percent_complete <= 48:
+                        return f'|███████████             | {percent_complete}% Complete'
+                    elif 48 < percent_complete <= 52:
+                        return f'|████████████            | {percent_complete}% Complete'
+                    elif 52 < percent_complete <= 56:
+                        return f'|█████████████           | {percent_complete}% Complete'
+                    elif 56 < percent_complete <= 60:
+                        return f'|██████████████          | {percent_complete}% Complete'
+                    elif 60 < percent_complete <= 64:
+                        return f'|███████████████         | {percent_complete}% Complete'
+                    elif 64 < percent_complete <= 68:
+                        return f'|████████████████        | {percent_complete}% Complete'
+                    elif 68 < percent_complete <= 72:
+                        return f'|█████████████████       | {percent_complete}% Complete'
+                    elif 72 < percent_complete <= 76:
+                        return f'|██████████████████      | {percent_complete}% Complete'
+                    elif 76 < percent_complete <= 80:
+                        return f'|███████████████████     | {percent_complete}% Complete'
+                    elif 80 < percent_complete <= 84:
+                        return f'|████████████████████    | {percent_complete}% Complete'
+                    elif 84 < percent_complete <= 88:
+                        return f'|█████████████████████   | {percent_complete}% Complete'
+                    elif 88 < percent_complete <= 92:
+                        return f'|██████████████████████  | {percent_complete}% Complete'
+                    elif 92 < percent_complete <= 96:
+                        return f'|██████████████████████  | {percent_complete}% Complete'
+                    elif 96 < percent_complete <= 99:
+                        return f'|███████████████████████ | {percent_complete}% Complete'
+                    elif percent_complete == 100:
+                        return f'|█████████████████████████| {percent_complete}% Complete'
+                    
+                    
+                print(f"I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
+                print(f"Sweet! You're now {percent_complete}% done with {book_edit.title}.")
+                progress_bar()
                 cr_return_prompt()
             
         #edit the details of a book you're currently reading:
@@ -410,7 +470,7 @@ def main():
 
 
 
-######################## COMPLETED BOOKZZZ ########################
+#################################################### COMPLETED BOOKZ ####################################################
         def completed_main():
             questions = [
                 inquirer.List(
@@ -592,15 +652,23 @@ def main():
         print('''
 
 +++ !!!Welcome to GooderReads!!! +++
-               ___________
-              /           \
-              |            |
-              |       ___
-              |      |    \
-              |            |
-              |            |
-              \____________/
+                                                                                                                                                         
+                                                                                                                                                  
+  ,----..                                                                   ,-.----.                                                              
+ /   /   \                               ,---,                              \    /  \                                  ,---,                      
+|   :     :     ,---.      ,---.       ,---.'|              __  ,-.         ;   :    \                               ,---.'|                      
+.   |  ;. /    '   ,'\    '   ,'\      |   | :            ,' ,'/ /|         |   | .\ :                               |   | :   .--.--.            
+.   ; /--`    /   /   |  /   /   |     |   | |    ,---.   '  | |' |         .   : |: |     ,---.      ,--.--.        |   | |  /  /    '           
+;   | ;  __  .   ; ,. : .   ; ,. :   ,--.__| |   /     \  |  |   ,'         |   |  \ :    /     \    /       \     ,--.__| | |  :  /`./           
+|   : |.' .' '   | |: : '   | |: :  /   ,'   |  /    /  | '  :  /           |   : .  /   /    /  |  .--.  .-. |   /   ,'   | |  :  ;_             
+.   | '_.' : '   | .; : '   | .; : .   '  /  | .    ' / | |  | '            ;   | |  \  .    ' / |   \__\/: . .  .   '  /  |  \  \    `.          
+'   ; : \  | |   :    | |   :    | '   ; |:  | '   ;   /| ;  : |            |   | ;\  \ '   ;   /|   ," .--.; |  '   ; |:  |   `----.   \         
+'   | '/  .'  \   \  /   \   \  /  |   | '/  ' '   |  / | |  , ;            :   ' | \.' '   |  / |  /  /  ,.  |  |   | '/  '  /  /`--'  /         
+|   :    /     `----'     `----'   |   :    :| |   :    |  ---'             :   : :-'   |   :    | ;  :   .'   \ |   :    :| '--'.     /          
+ \   \ .'                           \   \  /    \   \  /                    |   |.'      \   \  /  |  ,     .-./  \   \  /     `--'---'           
+  `---`                              `----'      `----'                     `---'         `----'    `--`---'       `----'                       
 
+              It's like goodreads, but gooder!
       ''')
     main_menu()
 
