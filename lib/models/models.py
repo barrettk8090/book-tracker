@@ -17,7 +17,7 @@ class Bookshelf(Base):
         if type(value) is str and 3<len(value):
             return value
         else:
-            raise ValueError(f"Sorry, that is not a valid {value}")
+            raise ValueError(f"Sorry, that is not a valid {key}. You entered: {value}")
 
 class Book(Base):
     __tablename__ = "book"
@@ -35,10 +35,10 @@ class Book(Base):
 
     @validates("title", "author")
     def validate_title_author(self, key, value):
-        if type(value) is str and 0<len(value):
+        if type(value) is str and 3<len(value):
             return value
         else:
-            raise ValueError(f"Sorry, but you must enter a {value}. Please try again.")
+            raise ValueError(f"Sorry, that is not a valid {key}. You entered: {value}")
         
     @validates("page_count")
     def validate_page_count(self, key, value):
@@ -46,6 +46,9 @@ class Book(Base):
             return value
         elif type(value) is str and 0<=len(value):
             return int(value)
+        elif type(value) is str and value == "":
+            value == 0
+            return value 
         else:
             raise ValueError(f"Please enter a value for page count so that we can track your progress later on.")
     

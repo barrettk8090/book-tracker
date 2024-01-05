@@ -107,7 +107,7 @@ def main():
                 title = new_title,
                 author = new_author,
                 description = new_description,
-                page_count = new_page_count,
+                page_count = int(new_page_count),
                 pages_read = 0,
                 type = "Want To Read",
                 star_rating = None,
