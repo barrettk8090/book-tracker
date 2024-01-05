@@ -670,7 +670,7 @@ def main():
  \   \ .'                           \   \  /    \   \  /                    |   |.'      \   \  /  |  ,     .-./  \   \  /     `--'---'           
   `---`                              `----'      `----'                     `---'         `----'    `--`---'       `----'                       
 
-              It's like goodreads, but gooder!
+              It's like goodreads, but gooder!!
       ''', "magenta")
     main_menu()
 
