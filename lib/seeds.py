@@ -96,7 +96,7 @@ with Session(engine) as session:
     )
 
     b7 = Book(
-        title = "The Dark Forest",
+        title = "Deaths End",
         author = "Liu Cixin",
         description = "Half a century after the Doomsday Battle, the uneasy balance of Dark Forest Deterrence keeps the Trisolaran invaders at bay.",
         page_count = 604,
