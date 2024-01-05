@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base, validates
 from models.models import *
 from collections import Counter
+from termcolor import colored, cprint
 import inquirer
 
 engine = create_engine('sqlite:///bookshelf.db')
@@ -117,7 +118,7 @@ def main():
             session.add(new_wtr)
             session.commit()
 
-            print(f"Great, I've added the book, {new_title}, to your Want to Read list!")
+            cprint(f"\nGreat, I've added the book, {new_title}, to your Want to Read list!\n", "red")
 
             wtr_return_prompt()
 
@@ -177,7 +178,7 @@ def main():
 
                 session.add(book_edit)
                 session.commit()
-                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}") 
+                cprint(f"\nAwesome, that book has been updated! Here are the new details: \n {book_edit}", "red") 
                 wtr_return_prompt()
             else:
                 wtr_main()
@@ -199,9 +200,9 @@ def main():
             response = inquirer.prompt(questions)
             if response["confirm_del"] == f"Yes, delete {title_to_delete}":
                 book_del = session.query(Book).filter(Book.title == title_to_delete).first()
-                print("Okay, that book has now been permanently deleted from your Want to Read list.")
                 session.delete(book_del)
                 session.commit()
+                cprint("\nOkay, that book has now been permanently deleted from your Want to Read list.\n", "red")
                 wtr_return_prompt()
             else:
                 wtr_main()
@@ -214,7 +215,7 @@ def main():
             while i < len(all_wtr):
                 all_authors.append(all_wtr[i].author)
                 i += 1
-            print(set(all_authors))
+            cprint(f"\nHere's a list of all the authors on your Want to Read list: {list(set(all_authors))}\n", "red")
             wtr_return_prompt()
 
         #move a want to read book to currently reading list
@@ -240,8 +241,8 @@ def main():
                 book_move.pages_read = int(page_q)
                 session.add(book_move)
                 session.commit()
-                print(f"Thanks! {title_to_move} has been moved from your Want to Read list to your Currently Reading list.")
-                print(book_move)
+                cprint(f"\nThanks! {title_to_move} has been moved from your Want to Read list to your Currently Reading list.\n", "red")
+                cprint(book_move, "red")
                 wtr_return_prompt()
             else:
                 wtr_main()
@@ -332,7 +333,7 @@ def main():
                     book_edit.personal_review = new_personal_review
                     session.add(book_edit)
                     session.commit()
-                    print(f"It's lit! Congrats on finishing the book, {book_edit.title}! It's been moved from Currently Reading to Completed List.\n")
+                    cprint(f"\nIt's lit! Congrats on finishing the book, {book_edit.title}! It's been moved from Currently Reading to Completed List.\n", "red")
                     cr_return_prompt()
                 else:
                     cr_main()
@@ -342,63 +343,64 @@ def main():
                 percent_complete = int(((book_edit.pages_read) / (book_edit.page_count))*100)
                 def progress_bar():
                     if percent_complete == 0:
-                        print ('|                        | 0% Complete') 
+                        cprint ('|                        | 0% Complete', "green") 
                     elif 0 < percent_complete <= 4:
-                        print (f'|█                       | {percent_complete}% Complete')
+                        cprint (f'|█                       | {percent_complete}% Complete', "green")
                     elif 4 < percent_complete <= 8:
-                        print (f'|██                      | {percent_complete}% Complete')
+                        cprint (f'|██                      | {percent_complete}% Complete', "green")
                     elif 8 < percent_complete <= 12:
-                        print (f'|███                     | {percent_complete}% Complete')
+                        cprint (f'|███                     | {percent_complete}% Complete', "green")
                     elif 12 < percent_complete <= 16:
-                        print (f'|████                    | {percent_complete}% Complete')
+                        cprint (f'|████                    | {percent_complete}% Complete', "green")
                     elif 16 < percent_complete <= 20:
-                        print (f'|█████                   | {percent_complete}% Complete')
+                        cprint (f'|█████                   | {percent_complete}% Complete', "green")
                     elif 20 < percent_complete <= 24:
-                        print (f'|██████                  | {percent_complete}% Complete')
+                        cprint (f'|██████                  | {percent_complete}% Complete', "green")
                     elif 24 < percent_complete <= 28:
-                        print (f'|███████                 | {percent_complete}% Complete')
+                        cprint (f'|███████                 | {percent_complete}% Complete', "green")
                     elif 28 < percent_complete <= 32:
-                        print (f'|████████                | {percent_complete}% Complete')
+                        cprint (f'|████████                | {percent_complete}% Complete', "green")
                     elif 32 < percent_complete <= 36:
-                        print (f'|█████████               | {percent_complete}% Complete')
+                        cprint (f'|█████████               | {percent_complete}% Complete', "green")
                     elif 36 < percent_complete <= 40:
-                        print (f'|██████████              | {percent_complete}% Complete')
+                        cprint (f'|██████████              | {percent_complete}% Complete', "green")
                     elif 40 < percent_complete <= 44:
-                        print (f'|██████████              | {percent_complete}% Complete')
+                        cprint (f'|██████████              | {percent_complete}% Complete', "green")
                     elif 44 < percent_complete <= 48:
-                        print (f'|███████████             | {percent_complete}% Complete')
+                        cprint (f'|███████████             | {percent_complete}% Complete', "green")
                     elif 48 < percent_complete <= 52:
-                        print (f'|████████████            | {percent_complete}% Complete')
+                        cprint (f'|████████████            | {percent_complete}% Complete', "green")
                     elif 52 < percent_complete <= 56:
-                        print (f'|█████████████           | {percent_complete}% Complete')
+                        cprint (f'|█████████████           | {percent_complete}% Complete', "green")
                     elif 56 < percent_complete <= 60:
-                        print (f'|██████████████          | {percent_complete}% Complete')
+                        cprint (f'|██████████████          | {percent_complete}% Complete', "green")
                     elif 60 < percent_complete <= 64:
-                        print (f'|███████████████         | {percent_complete}% Complete')
+                        cprint (f'|███████████████         | {percent_complete}% Complete', "green")
                     elif 64 < percent_complete <= 68:
-                        print (f'|████████████████        | {percent_complete}% Complete')
+                        cprint (f'|████████████████        | {percent_complete}% Complete', "green")
                     elif 68 < percent_complete <= 72:
-                        print (f'|█████████████████       | {percent_complete}% Complete')
+                        cprint (f'|█████████████████       | {percent_complete}% Complete', "green")
                     elif 72 < percent_complete <= 76:
-                        print (f'|██████████████████      | {percent_complete}% Complete')
+                        cprint (f'|██████████████████      | {percent_complete}% Complete', "green")
                     elif 76 < percent_complete <= 80:
-                        print (f'|███████████████████     | {percent_complete}% Complete')
+                        cprint (f'|███████████████████     | {percent_complete}% Complete', "green")
                     elif 80 < percent_complete <= 84:
-                        print (f'|████████████████████    | {percent_complete}% Complete')
+                        cprint (f'|████████████████████    | {percent_complete}% Complete', "green")
                     elif 84 < percent_complete <= 88:
-                        print (f'|█████████████████████   | {percent_complete}% Complete')
+                        cprint (f'|█████████████████████   | {percent_complete}% Complete', "green")
                     elif 88 < percent_complete <= 92:
-                        print (f'|██████████████████████  | {percent_complete}% Complete')
+                        cprint (f'|██████████████████████  | {percent_complete}% Complete', "green")
                     elif 92 < percent_complete <= 96:
-                        print (f'|██████████████████████  | {percent_complete}% Complete')
+                        cprint (f'|██████████████████████  | {percent_complete}% Complete', "green")
                     elif 96 < percent_complete <= 99:
-                        print (f'|███████████████████████ | {percent_complete}% Complete')
+                        cprint (f'|███████████████████████ | {percent_complete}% Complete', "green")
                     elif percent_complete == 100:
-                        print (f'|█████████████████████████| {percent_complete}% Complete')
+                        cprint (f'|█████████████████████████| {percent_complete}% Complete', "green")
                       
-                print(f"I've updated your progress on that book. Here's all the details of that book: \n {book_edit}")
-                print(f"Sweet! You're now {percent_complete}% done with {book_edit.title}.\n")
+                cprint(f"\nI've updated your progress on that book. Here's all the details of that book: \n {book_edit}", "red")
+                cprint(f"\nYou're now {percent_complete}% done with {book_edit.title}.\n", "green")
                 progress_bar()
+                print("\n")
                 cr_return_prompt()
             
         #edit the details of a book you're currently reading:
@@ -432,7 +434,7 @@ def main():
 
                 session.add(book_edit)
                 session.commit()
-                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
+                cprint(f"\nAwesome, that book has been updated! Here are the new details: \n {book_edit}", "red")
                 cr_return_prompt()
             else: 
                 cr_main()
@@ -440,7 +442,8 @@ def main():
         #move a book from currently reading to your completed books list
         def move_cr():
             print(f"Here are the books on your Currently Reading list: {session.query(Book).filter(Book.bookshelf_id == 1).all()}")
-            title_to_move = input("Please type in the title of the book that you would like to move to your Completed Books list. IMPORTANT: This action will automatically update the number of pages you've read to match the total pages in this book: ")
+            impt_text= colored("IMPORTANT:", "red")
+            title_to_move = input(f"Please type in the title of the book that you would like to move to your Completed Books list.\n{impt_text} This action will automatically update the number of pages you've read to match the total pages in this book: ")
             questions = [
                 inquirer.List(
                     "confirm_move",
@@ -463,9 +466,11 @@ def main():
                 book_move.personal_review = new_personal_review
                 session.add(book_move)
                 session.commit()
-                print(f"It's lit! Congrats on finishing the book, {book_move.title}! It's been moved from Currently Reading to Completed List.")
-                print(f"{book_move}")
+                cprint(f"\nIt's lit! Congrats on finishing the book, {book_move.title}! It's been moved from Currently Reading to Completed List.\n", "red")
+                cprint(f"{book_move}", "red")
                 cr_return_prompt()
+            else:
+                main_menu()
 
 
 
@@ -520,9 +525,9 @@ def main():
         
         #view all completed books
         def view_cb():
-            print("Here's a list of all the books you've finished reading:")
+            cprint("\nHere's a list of all the books you've finished reading: \n", "red")
             all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
-            print(all_cb)
+            cprint(all_cb, "red")
 
             cb_return_prompt()
 
@@ -555,7 +560,7 @@ def main():
         #Get the number of total books you've completed
         def total_completed_books():
             all_cb = session.query(Book).filter(Book.bookshelf_id == 3).all()
-            print(f"Altogether, you've read and finished {len(all_cb)} books!")
+            cprint(f"\nAltogether, you've read and finished {len(all_cb)} books!\n", "red")
             cb_return_prompt()
 
         #calculate the total number of pages someone has read across all their completed books
@@ -567,7 +572,7 @@ def main():
             while i < len(all_cb):
                 total_pages += all_cb[i].page_count
                 i += 1
-            print(f"In total, you have read {total_pages} pages!")
+            cprint(f"\nIn total, you have read {total_pages} pages!\n", "red")
             cb_return_prompt()
 
         #calculate the author that has been read the most 
@@ -580,7 +585,7 @@ def main():
                 i+=1
             author_counts = Counter(all_authors)
             top_author = author_counts.most_common(1)
-            print(f"Your top author in your Completed Books list is {top_author[0][0]}")  
+            cprint(f"\nYour top author in your Completed Books list is: {(top_author[0][0]).upper()}\n", "red")  
             cb_return_prompt()
 
         #edit a book you've completed
@@ -618,7 +623,7 @@ def main():
                 session.add(book_edit)
                 session.commit()
 
-                print(f"Awesome, that book has been updated! Here are the new details: \n {book_edit}")
+                cprint(f"\nAwesome, that book has been updated! Here are the new details: \n {book_edit}\n", "red")
 
                 cb_return_prompt()
             else:
@@ -641,16 +646,14 @@ def main():
             response = inquirer.prompt(questions)
             if response["confirm_del"] == f"Yes, delete {title_to_delete}":
                 book_del = session.query(Book).filter(Book.title == title_to_delete).first()
-                print("Okay, that book has now been permanently deleted from your Completed Books list.")
                 session.delete(book_del)
                 session.commit()
+                cprint("\nOkay, that book has now been permanently deleted from your Completed Books list.\n", "red")
                 cb_return_prompt()
             else:
                 completed_main()
             
-        print('''
-
-+++ !!!Welcome to GooderReads!!! +++
+        cprint('''
                                                                                                                                                          
                                                                                                                                                   
   ,----..                                                                   ,-.----.                                                              
@@ -668,7 +671,7 @@ def main():
   `---`                              `----'      `----'                     `---'         `----'    `--`---'       `----'                       
 
               It's like goodreads, but gooder!
-      ''')
+      ''', "magenta")
     main_menu()
 
 if __name__ == "__main__":
